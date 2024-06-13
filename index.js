@@ -10,23 +10,18 @@ const bot = new TelegramBot(token, { webHook: { port: port } });
 
 bot.setWebHook(webhookUrl);
 
-app.post(`/webhook/${token}`, async(req, res)=>{
-    await bot.processUpdate(req.body)
-    res.sendStatus(200)
-})
+app.post(`/webhook/${token}`, async (req, res) => {
+  await bot.processUpdate(req.body);
+  res.sendStatus(200);
+});
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
-
-
-
-const bot = new TelegramBot(token, { polling: true });
 
 bot.on("message", async (msg) => {
   const chatId = msg.chat.id;
