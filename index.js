@@ -2,17 +2,29 @@ const TelegramBot = require("node-telegram-bot-api");
 const axios = require("axios");
 const express = require("express");
 const app = express();
+const port = 5000;
+
+const token = "6991503389:AAFOuZgAWKhLjNJ4XP1w9PaSU6Y72uX0Bmw";
+const webhookUrl = `https://telegram-weather-check-bot.vercel.app/webhook/${token}`;
+const bot = new TelegramBot(token, { webHook: { port: port } });
+
+bot.setWebHook(webhookUrl);
+
+app.post(`/webhook/${token}`, async(req, res)=>{
+    await bot.processUpdate(req.body)
+    res.sendStatus(200)
+})
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-const port = 5000;
+
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
 
-const token = "6991503389:AAFOuZgAWKhLjNJ4XP1w9PaSU6Y72uX0Bmw";
+
 
 const bot = new TelegramBot(token, { polling: true });
 
