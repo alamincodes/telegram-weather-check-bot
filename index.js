@@ -26,11 +26,24 @@ const suggestedCities = [
   "Rajshahi",
 ];
 
+// Helper function to check if the message contains only emojis
+const isEmoji = (message) => {
+  const emojiRegex =
+    /^([\u2700-\u27BF]|[\u1F600-\u1F64F]|[\u1F300-\u1F5FF]|[\u1F680-\u1F6FF]|[\u2600-\u26FF]|[\u1F1E6-\u1F1FF]|[\u1F900-\u1F9FF]|[\u1FA70-\u1FAFF]|[\u200D\uFE0F])+$/u;
+  return emojiRegex.test(message);
+};
+
 // Handle all incoming messages
 bot.on("message", async (msg) => {
   const chatId = msg.chat.id;
   const userInput = msg.text?.trim();
-  console.log(msg);
+
+  // Respond with the same emoji if the input is an emoji
+  if (isEmoji(userInput)) {
+    bot.sendMessage(chatId, userInput);
+    return;
+  }
+
   // Handle /start command
   if (userInput === "/start") {
     const cityButtons = {
@@ -55,7 +68,18 @@ bot.on("message", async (msg) => {
   if (userInput?.toLowerCase() === "thank you") {
     bot.sendMessage(
       chatId,
-      `You're welcome, ${msg.chat.first_name} ${msg.chat.last_name}!`
+      `You're welcome, ${msg.chat.first_name || "friend"}!`
+    );
+    return;
+  }
+
+  // Handle /poll command
+  if (userInput === "/poll") {
+    bot.sendPoll(
+      chatId,
+      "Which city would you like to get the weather for?",
+      suggestedCities,
+      { is_anonymous: false }
     );
     return;
   }
