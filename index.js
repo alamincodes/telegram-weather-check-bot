@@ -45,7 +45,7 @@ bot.on("message", async (msg) => {
   }
 
   // Handle /start command
-  if (userInput === "/start") {
+  if (userInput.toLowerCase() === "/start") {
     const cityButtons = {
       reply_markup: {
         inline_keyboard: suggestedCities.map((city) => [
@@ -74,7 +74,7 @@ bot.on("message", async (msg) => {
   }
 
   // Handle /poll command
-  if (userInput === "/poll") {
+  if (userInput.toLowerCase() === "/poll") {
     bot.sendPoll(
       chatId,
       "Which city would you like to get the weather for?",
